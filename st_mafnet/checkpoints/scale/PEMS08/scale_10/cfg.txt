@@ -1,0 +1,102 @@
+DESCRIPTION: STMAFNet(PEMS08) configuration
+RUNNER: <class 'st_mafnet.runner.st_mafnet_runner.STMAFNetRunner'>
+DATASET_CLS: <class 'st_mafnet.data.forecasting_dataset.ForecastingDataset'>
+DATASET_NAME: PEMS08
+DATASET_TYPE: Traffic flow
+DATASET_INPUT_LEN: 12
+DATASET_OUTPUT_LEN: 12
+GPU_NUM: 1
+ENV:
+  SEED: 1
+  CUDNN:
+    ENABLED: True
+    DETERMINISTIC: True
+    BENCHMARK: False
+MODEL:
+  NAME: STMAFNet
+  ARCH: <class 'st_mafnet.arch.st_mafnet.STMAFNet'>
+  PARAM:
+    num_nodes: 170
+    supports: [tensor([[0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        ...,
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.6262, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000]]), tensor([[0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        ...,
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.7127, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000]])]
+    in_channels: 1
+    hidden_dim: 64
+    adp_dim: 128
+    skip_channels: 256
+    out_dim: 12
+    num_scales: 10
+    decoder_layers: 2
+    fusion_layers: 2
+    dropout: 0.2
+    node_dim: 64
+    time_of_day_size: 288
+    day_of_week_size: 7
+    temp_dim_tid: 32
+    temp_dim_diw: 32
+    adaptive_embedding_dim: 64
+    if_time_in_day: True
+    if_day_in_week: True
+    adaptive_nhead: 4
+    adaptive_layers: 2
+    if_adaptive_graph: True
+    if_forward_graph: False
+    if_backward_graph: True
+    if_multi_scale_anchor: True
+    if_adp_emb: True
+  FORWARD_FEATURES: [0, 1, 2]
+  TARGET_FEATURES: [0]
+TRAIN:
+  LOSS: masked_mae
+  OPTIM:
+    TYPE: Adam
+    PARAM:
+      lr: 0.002
+      weight_decay: 1e-05
+      eps: 1e-08
+  LR_SCHEDULER:
+    TYPE: MultiStepLR
+    PARAM:
+      milestones: [1, 18, 36, 54, 72]
+      gamma: 0.5
+  CLIP_GRAD_PARAM:
+    max_norm: 3.0
+  NUM_EPOCHS: 300
+  CKPT_SAVE_DIR: checkpoints/STMAFNet_300
+  DATA:
+    DIR: ../datasets/PEMS08
+    BATCH_SIZE: 32
+    PREFETCH: False
+    SHUFFLE: True
+    NUM_WORKERS: 2
+    PIN_MEMORY: True
+  NULL_VAL: 0.0
+VAL:
+  INTERVAL: 1
+  DATA:
+    DIR: ../datasets/PEMS08
+    BATCH_SIZE: 32
+    PREFETCH: False
+    SHUFFLE: False
+    NUM_WORKERS: 2
+    PIN_MEMORY: True
+TEST:
+  INTERVAL: 1
+  DATA:
+    DIR: ../datasets/PEMS08
+    BATCH_SIZE: 32
+    PREFETCH: False
+    SHUFFLE: False
+    NUM_WORKERS: 2
+    PIN_MEMORY: True
+MD5: 21afeca3ffc10cdf4e90589d029b0e70
