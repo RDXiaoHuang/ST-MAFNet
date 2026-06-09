@@ -1,1 +1,1 @@
-https://github.com/RDXiaoHuang/ST-MAFNet/Acceptance-Certificate.pdf
+[(assets/certificate_cover.png)]
