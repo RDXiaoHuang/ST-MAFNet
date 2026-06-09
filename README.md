@@ -1,1 +1,4 @@
-[![论文接收证书](assets/certificate_cover.png)]
+## 🎉 Paper Accepted
+Our paper **ST-MAFNet** has been officially accepted by MDPI journal!
+
+[Acceptance Certificate](https://github.com/RDXiaoHuang/ST-MAFNet/blob/main/Acceptance-Certificate.pdf)
